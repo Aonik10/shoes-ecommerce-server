@@ -14,9 +14,14 @@ const userSchema = new Schema(
         data: {
             name: String,
             lastname: String,
+            city: String,
+            address: String,
+            postalCode: String,
+            phoneNumber: String,
             profilePhoto: String,
         },
-        cart: [], // chequear si es necesario armar un schema para los elementos de este array
+        cart: [],
+        purchases: [],
     },
     {
         timestamps: true,

@@ -6,6 +6,10 @@
             "data": {
                 "name": "Emiliano",
                 "lastname": "Pellegrino",
+                "city": "City of Buenos Aires",
+                "address": "del Libertador Av. 6255",
+                "postalCode": "1428",
+                "phoneNumber": "11-6468-0397",
                 "profilePhoto": "https://iili.io/HkDD0mB.jpg"
             },
             "cart": [
@@ -33,6 +37,10 @@
             "data": {
                 "name": "Mario",
                 "lastname": "Carbajal",
+                "city": "City of Buenos Aires",
+                "address": "Falsa St. 123",
+                "postalCode": "1234",
+                "phoneNumber": "11-1234-5678",
                 "profilePhoto": "https://iili.io/HkDmVUJ.jpg"
             },
             "cart": []
@@ -43,6 +51,10 @@
             "data": {
                 "name": "Emi",
                 "lastname": "Hoss",
+                "city": "San Isidro",
+                "address": "Falsa St. 456",
+                "postalCode": "5678",
+                "phoneNumber": "11-9012-3456",
                 "profilePhoto": "https://iili.io/HkDmMla.jpg"
             },
             "cart": []

@@ -1,6 +1,11 @@
 import User from "../models/User.js";
 import Product from "../models/Product.js";
-import { response } from "express";
+import { v4 as uuid } from "uuid";
+
+export const getUsers = async (req, res) => {
+    const users = await User.find();
+    res.status(200).json(users);
+};
 
 export const createUser = async (req, res) => {
     const { username, password, data } = req.body;
@@ -12,6 +17,13 @@ export const createUser = async (req, res) => {
     });
     const savedUser = newUser.save();
     res.status(200).json(await savedUser);
+};
+
+export const updateUser = async (req, res) => {
+    const updatedUser = await User.findByIdAndUpdate(req.params.id, req.body, {
+        new: true,
+    });
+    res.status(200).json(updatedUser);
 };
 
 export const addToCart = async (req, res) => {
@@ -28,21 +40,15 @@ export const addToCart = async (req, res) => {
                 units: 1,
             });
         await user.save();
-        res.status(204).json();
+        res.status(200).json({ message: "ok" });
     }
 };
 
-export const modCartUnitByOne = async (req, res) => {
+export const modifyCartUnits = async (req, res) => {
     let { id, size, value } = req.body;
-    let report = await modByOne(req.session.user, id, size, value);
-    res.status(200).json({
-        message: "Update request OK",
-        data: report,
-    });
-};
-
-export const modifyCartUnitByValue = async (req, res) => {
-    let { id, size, value } = req.body;
+    if (value <= 0 || value >= 100) {
+        return res.status(401).json({ message: "invalid value" });
+    }
     let report = await modByValue(req.session.user, id, size, value);
     res.status(200).json({
         message: "Update request OK",
@@ -50,27 +56,12 @@ export const modifyCartUnitByValue = async (req, res) => {
     });
 };
 
-async function modByOne(user, id, size, unit) {
-    let report = await User.updateOne(
-        {
-            username: user,
-            cart: {
-                $elemMatch: { id: id },
-                $elemMatch: { size: size },
-            },
-        },
-        { $inc: { "cart.$.units": unit } }
-    );
-    return report;
-}
-
 async function modByValue(user, id, size, value) {
     let report = await User.updateOne(
         {
             username: user,
             cart: {
-                $elemMatch: { id: id },
-                $elemMatch: { size: size },
+                $elemMatch: { id: id, size: size },
             },
         },
         { $set: { "cart.$.units": value } }
@@ -100,13 +91,51 @@ async function buildItemCart(item) {
 
 export async function removeFromCart(req, res) {
     const { id, size } = req.body;
-    let user = await User.findOne({ username: "emp10999@gmail.com" });
+    let user = await User.findOne({ username: req.session.user });
     let newCart = user.cart.filter(
         (item) => item.id !== id || item.size !== size
     );
-    console.log(user.cart);
     user.cart = newCart;
-    console.log(user.cart);
     user.save();
     res.status(200).json(newCart);
+}
+
+export async function createPurchase(req, res) {
+    // genere un ID de operacion (ver si no se hace solo)
+    // guarde los archivos del carrito y los mande a "purchases" del user con el ID generado
+    // Deje el carrito vacio
+    // Devuelva un mensaje si todo salio bien o algo salio mal (json)
+
+    try {
+        let user = await User.findOne({ username: req.session.user });
+        if (user.cart.length == 0) throw new Error("Cart is empty");
+        let purchase = {
+            orderId: uuid(),
+            date: new Date().toLocaleDateString("en-GB", {
+                day: "numeric",
+                month: "numeric",
+                year: "numeric",
+            }),
+            data: await Promise.all(
+                [...user.cart].map(async (item) => await buildItemCart(item))
+            ),
+        };
+        user.purchases.push(purchase);
+        user.cart = [];
+        user.save();
+        res.status(200).json({
+            message: "Successfully Purchased",
+            orderCode: purchase.orderId,
+        });
+    } catch (err) {
+        res.status(202).json({
+            message: "Something went wrong",
+            error: err,
+        });
+    }
+}
+
+export async function getUserPurchases(req, res) {
+    let user = await User.findOne({ username: req.session.user });
+    res.status(200).json({ purchases: user.purchases });
 }

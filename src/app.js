@@ -3,6 +3,7 @@ import morgan from "morgan";
 import cors from "cors";
 import session from "express-session";
 import pkg from "../package.json" assert { type: "json" };
+import { SECRETS } from "../config.js";
 
 // import routes
 import productRoutes from "./routes/productsRoutes.js";
@@ -23,9 +24,8 @@ app.use(morgan("dev"));
 app.use(express.json());
 app.use(
     session({
-        secret: "password_loco",
+        secret: SECRETS.serverSecret,
         resave: false,
-        domain: "localhost",
         saveUninitialized: true,
         cookie: { secure: false },
     })
