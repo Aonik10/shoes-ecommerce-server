@@ -2,7 +2,7 @@
 
 ## Overview
 
-This is a simple server builded with Express and MongoDB. The idea was to create a website where the front-end application takes the resources of its products byS http requests. The server is currently hosted here: https://home-pc.emipellegrino.com/api
+This is a simple server created with Express and MongoDB. The idea was to create a website where the front-end application takes the resources of its products byS http requests. The server is currently hosted here: https://home-pc.emipellegrino.com/api
 
 You will found the updated code of front-end app [here](https://github.com/Aonik10/shoes-ecommerce)
 
