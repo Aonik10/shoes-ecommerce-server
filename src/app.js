@@ -27,7 +27,11 @@ app.use(
         secret: SECRETS.serverSecret,
         resave: false,
         saveUninitialized: true,
-        cookie: { secure: false },
+        proxy: true,
+        cookie: {
+            secure: true,
+            sameSite: "none",
+        },
     })
 );
 
