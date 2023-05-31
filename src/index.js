@@ -11,7 +11,7 @@ import productRoutes from "./routes/productsRoutes.js";
 import authRoutes from "./routes/authRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
 
-const app = express();
+export const app = express();
 
 // Settings
 app.set("pkg", pkg);
@@ -43,5 +43,3 @@ app.use("/api/user", userRoutes);
 app.listen(app.get("port"));
 
 console.log(`Server ${app.get("pkg").name} on port ${app.get("port")}`);
-
-export default app;
