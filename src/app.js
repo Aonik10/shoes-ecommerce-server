@@ -1,3 +1,5 @@
+/*
+
 import express from "express";
 import morgan from "morgan";
 import cors from "cors";
@@ -40,3 +42,5 @@ app.use("/api/auth", authRoutes);
 app.use("/api/user", userRoutes);
 
 export default app;
+
+*/
