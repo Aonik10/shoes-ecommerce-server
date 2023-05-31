@@ -14,6 +14,7 @@ import userRoutes from "./routes/userRoutes.js";
 const app = express();
 
 // Settings
+app.use(express.static("public"));
 app.set("pkg", pkg);
 app.set("port", 4000);
 app.set("case sensitive routing", true);
